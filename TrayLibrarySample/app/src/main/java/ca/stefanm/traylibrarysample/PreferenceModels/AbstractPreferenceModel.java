@@ -33,7 +33,16 @@ public class AbstractPreferenceModel {
 
 
     public ComposedFoo getChildFoo(){
-        return (ComposedFoo)getObject(PREFERENCE_CHILD_KEY, ComposedFoo.class);
+
+        ComposedFoo returned = null;
+
+        returned = (ComposedFoo)getObject(PREFERENCE_CHILD_KEY, ComposedFoo.class);
+
+        if (returned == null){
+            return new ComposedFoo("", "", 0);
+        } else {
+            return returned;
+        }
     }
 
     public void setChildFoo(ComposedFoo childFoo) {
@@ -130,13 +139,15 @@ public class AbstractPreferenceModel {
 
         try {
             if (type == Long.class){
-                return appPreferences.getLong(key);
+                return appPreferences.getLong(key, 0L);
             } else if (type == String.class) {
-                return appPreferences.getString(key);
+                return appPreferences.getString(key, "");
+            } else if (type == Boolean.class){
+                return appPreferences.getBoolean(key, false);
             } else {
                 Moshi moshi = new Moshi.Builder().build();
                 return moshi.adapter(type).fromJson(
-                        appPreferences.getString(key));
+                        appPreferences.getString(key, ""));
             }
         } catch (Exception e){
             Log.e(TAG, e.toString());

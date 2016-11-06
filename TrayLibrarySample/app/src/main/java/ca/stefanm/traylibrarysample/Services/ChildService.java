@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 import android.widget.Toast;
 
 import ca.stefanm.traylibrarysample.PreferenceModels.CommonPreferenceModel;
@@ -16,15 +17,19 @@ public class ChildService extends Service {
     public ChildService() {
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        Log.d(TAG, "onStartCommand for Childservice");
+        return super.onStartCommand(intent, flags, startId);
+
+    }
 
     private CommonPreferenceModel commonPreferenceModel;
 
     @Override
     public void onCreate(){
         super.onCreate();
-
         commonPreferenceModel = CommonPreferenceModel.getInstance(getApplicationContext());
-
     }
 
 
@@ -47,15 +52,11 @@ public class ChildService extends Service {
     };
 
 
-    //Send an intent to this service to update the shared preferences
-
-    //TODO Receive the intent here.....
 
     //Read preferences and post to toast
     private void readPrefs() {
         CommonPreferenceModel prefs = commonPreferenceModel;
-
-        Toast.makeText(this, "[ChildService] Reading Preferences: " + prefs.getFoo(), Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "[ChildService] Reading Preferences: " + prefs.getFoo());
     }
 
     //Increment preference val, write out a toast.
@@ -65,8 +66,7 @@ public class ChildService extends Service {
         CommonPreferenceModel.incrementFakeContents();
 
         CommonPreferenceModel.PopulatePrefsWithJunk(prefs);
-
-        Toast.makeText(this, "Incremented prefs", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "[ChildService] Writing Preferences: Incremented prefs");
     }
 
 

@@ -1,6 +1,7 @@
 package ca.stefanm.traylibrarysample;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -14,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ca.stefanm.traylibrarysample.PreferenceModels.CommonPreferenceModel;
+import ca.stefanm.traylibrarysample.Services.ChildService;
 import ca.stefanm.traylibrarysample.Services.IChildService;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        bindService(new Intent(this, ChildService.class), childServiceConnection, BIND_AUTO_CREATE);
+
     }
 
     @BindView(R.id.txtPrefContents) TextView sharedPreferenceContents;
@@ -79,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
             mChildService = null;
         }
     };
-
-    //TODO Now we need to communicate with the service.
 
     //Srv read prefs
     @OnClick(R.id.srvread)
